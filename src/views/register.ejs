@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Pagina Amarilla</title>
+    <link rel="stylesheet" href="/register.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="logo-form-link">
+            <div class="logo-form">
+                <span class="text-yellow">Pagina</span><span class="text-black">Amarilla</span>
+            </div>
+        </a>
+        <h2>Crear cuenta</h2>
+        <form action="/register" method="POST">
+            <input type="text" name="name" placeholder="Nombre completo" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+    </div>
+</body>
+
+</html>

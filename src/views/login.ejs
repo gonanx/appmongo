@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Pagina Amarilla</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="logo-form-link">
+            <div class="logo-form">
+                <span class="text-yellow">Pagina</span><span class="text-black">Amarilla</span>
+            </div>
+        </a>
+        <h2>Bienvenido</h2>
+        <form action="/login" method="POST">
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+    </div>
+</body>
+
+</html>

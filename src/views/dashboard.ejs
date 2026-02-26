@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pagina Amarilla</title>
+    <link rel="stylesheet" href="/dashboard.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/dashboard" class="logo">
+            <span class="text-yellow">Pagina</span><span class="text-black">Amarilla</span>
+        </a>
+        <div class="user-menu">
+            <button class="user-name" id="userBtn">
+                <%= user.name %> ▾
+            </button>
+            <div class="dropdown" id="userDropdown">
+                <a href="/logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <section class="search-section">
+            <h1>¿Qué estás buscando hoy?</h1>
+            <div class="search-box">
+                <input type="text" placeholder="Buscar servicios, empresas o profesionales...">
+                <button type="button">Buscar</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const btn = document.getElementById('userBtn');
+        const dropdown = document.getElementById('userDropdown');
+        btn.addEventListener('click', () => dropdown.classList.toggle('show'));
+        window.onclick = function (event) {
+            if (!event.target.matches('.user-name')) {
+                if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+
+</html>
