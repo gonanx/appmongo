@@ -18,17 +18,72 @@
                 <%= user.name %> ▾
             </button>
             <div class="dropdown" id="userDropdown">
-                <a href="/logout">Cerrar Sesión</a>
+                <% if (user && user._id) { %>
+                    <form action="/favoritos" method="POST" style="display: inline;">
+                        <input type="hidden" name="userId" value="<%= user._id %>">
+                        <button type="submit" class="link-btn">❤ Mis Favoritos</button>
+                    </form>
+                    <% } %>
+                        <a href="/logout">Cerrar Sesión</a>
             </div>
         </div>
     </nav>
 
     <main class="dashboard-container">
         <section class="search-section">
-            <h1>¿Qué estás buscando hoy?</h1>
-            <div class="search-box">
-                <input type="text" placeholder="Buscar servicios, empresas o profesionales...">
-                <button type="button">Buscar</button>
+            <h1>Encuentra lo que necesitas</h1>
+            <form action="/dashboard" method="GET" class="search-box-double">
+                <input type="text" name="q" value="<%= searchQuery %>" placeholder="¿Qué buscas?">
+                <div class="divider"></div>
+                <input type="text" name="ciudad" value="<%= ciudadQuery %>" placeholder="¿En qué ciudad?">
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
+
+        <section class="results-container">
+            <div class="business-grid">
+                <% negocios.forEach(negocio=> { %>
+                    <div class="business-card">
+                        <button
+                            class="fav-btn <%= user.favoritos.some(f => f._id.toString() === negocio._id.toString()) ? 'active' : '' %>"
+                            onclick="toggleFavorite('<%= user._id %>', '<%= negocio._id %>', this)">
+                            ❤
+                        </button>
+                        <div class="card-media" id="carrusel-<%= negocio._id %>">
+                            <% if (negocio.fotos && negocio.fotos.length> 0) { %>
+                                <% negocio.fotos.forEach((foto, index)=> { %>
+                                    <img src="/uploads/<%= foto %>" class="slide <%= index === 0 ? 'active' : '' %>">
+                                    <% }) %>
+                                        <% if (negocio.fotos.length> 1) { %>
+                                            <button class="prev"
+                                                onclick="moveSlide('<%= negocio._id %>', -1)">&#10094;</button>
+                                            <button class="next"
+                                                onclick="moveSlide('<%= negocio._id %>', 1)">&#10095;</button>
+                                            <% } %>
+                                                <% } else { %>
+                                                    <img src="/uploads/default.jpg" class="slide active">
+                                                    <% } %>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <span class="badge">
+                                    <%= negocio.categoria %>
+                                </span>
+                                <span class="rating">⭐ <%= negocio.puntuacion %></span>
+                            </div>
+                            <h3>
+                                <%= negocio.nombre %>
+                            </h3>
+                            <p class="subcat">
+                                <%= negocio.subcategoria %>
+                            </p>
+                            <div class="card-footer">
+                                <span>📍 <%= negocio.ubicacion %></span>
+                                <span>📞 <%= negocio.contacto %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
             </div>
         </section>
     </main>
@@ -37,10 +92,31 @@
         const btn = document.getElementById('userBtn');
         const dropdown = document.getElementById('userDropdown');
         btn.addEventListener('click', () => dropdown.classList.toggle('show'));
-        window.onclick = function (event) {
-            if (!event.target.matches('.user-name')) {
-                if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
+
+        function moveSlide(id, step) {
+            const container = document.getElementById('carrusel-' + id);
+            const slides = container.getElementsByClassName('slide');
+            let activeIndex = 0;
+            for (let i = 0; i < slides.length; i++) {
+                if (slides[i].classList.contains('active')) {
+                    activeIndex = i;
+                    slides[i].classList.remove('active');
+                    break;
+                }
             }
+            slides[(activeIndex + step + slides.length) % slides.length].classList.add('active');
+        }
+
+        async function toggleFavorite(userId, businessId, btn) {
+            if (!userId || userId === 'null') return alert("Debes iniciar sesión");
+            const isAdding = !btn.classList.contains('active');
+            const endpoint = isAdding ? '/favoritos/add' : '/favoritos/remove';
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, businessId })
+            });
+            if (response.ok) btn.classList.toggle('active');
         }
     </script>
 </body>

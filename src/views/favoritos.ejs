@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - Pagina Amarilla</title>
+    <link rel="stylesheet" href="/favoritos.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/dashboard" class="logo">
+            <span class="text-yellow">Pagina</span><span class="text-black">Amarilla</span>
+        </a>
+        <div class="user-menu">
+            <button class="user-name" id="userBtn">
+                <%= user.name %> ▾
+            </button>
+            <div class="dropdown" id="userDropdown">
+                <a href="/dashboard">Volver al Dashboard</a>
+                <a href="/logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <section class="search-section">
+            <h1>Mis Negocios Favoritos ❤</h1>
+            <p>Tienes <%= negocios.length %> negocios guardados</p>
+        </section>
+
+        <section class="results-container">
+            <div class="business-grid">
+                <% if (negocios.length> 0) { %>
+                    <% negocios.forEach(negocio=> { %>
+                        <div class="business-card">
+                            <div class="card-media" id="carrusel-<%= negocio._id %>">
+                                <% if (negocio.fotos && negocio.fotos.length> 0) { %>
+                                    <% negocio.fotos.forEach((foto, index)=> { %>
+                                        <img src="/uploads/<%= foto %>"
+                                            class="slide <%= index === 0 ? 'active' : '' %>">
+                                        <% }) %>
+                                            <% if (negocio.fotos.length> 1) { %>
+                                                <button class="prev"
+                                                    onclick="moveSlide('<%= negocio._id %>', -1)">&#10094;</button>
+                                                <button class="next"
+                                                    onclick="moveSlide('<%= negocio._id %>', 1)">&#10095;</button>
+                                                <% } %>
+                                                    <% } else { %>
+                                                        <img src="/uploads/default.jpg" class="slide active">
+                                                        <% } %>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="badge">
+                                        <%= negocio.categoria %>
+                                    </span>
+                                    <span class="rating">⭐ <%= negocio.puntuacion %></span>
+                                </div>
+                                <h3>
+                                    <%= negocio.nombre %>
+                                </h3>
+                                <p class="subcat">
+                                    <%= negocio.subcategoria %>
+                                </p>
+                                <div class="card-footer">
+                                    <span>📍 <%= negocio.ubicacion %></span>
+                                    <span>📞 <%= negocio.contacto %></span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                            <% } else { %>
+                                <p>Aún no has guardado ningún favorito.</p>
+                                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const btn = document.getElementById('userBtn');
+        const dropdown = document.getElementById('userDropdown');
+        btn.addEventListener('click', () => dropdown.classList.toggle('show'));
+
+        function moveSlide(id, step) {
+            const container = document.getElementById('carrusel-' + id);
+            const slides = container.getElementsByClassName('slide');
+            let activeIndex = 0;
+            for (let i = 0; i < slides.length; i++) {
+                if (slides[i].classList.contains('active')) {
+                    activeIndex = i;
+                    slides[i].classList.remove('active');
+                    break;
+                }
+            }
+            slides[(activeIndex + step + slides.length) % slides.length].classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

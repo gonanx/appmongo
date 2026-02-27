@@ -1,0 +1,54 @@
+/* Importamos la base del dashboard para no repetir código */
+@import url('dashboard.css');
+
+/* Estilos específicos para la vista de Favoritos */
+
+.dashboard-container h1 {
+    color: #1d1d1f;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.dashboard-container p {
+    text-align: center;
+    color: #86868b;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+}
+
+/* Estilo para cuando no hay favoritos */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem 2rem;
+    background: white;
+    border-radius: 20px;
+    border: 2px dashed #ccc;
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.btn-back {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.btn-back:hover {
+    transform: scale(1.05);
+}
+
+/* Ajuste de la cuadrícula si hay pocos elementos */
+.business-grid {
+    min-height: 400px;
+}
